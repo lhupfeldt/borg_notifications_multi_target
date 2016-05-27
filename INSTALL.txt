@@ -1,0 +1,41 @@
+Common client and server instructions
+=====================================
+
+Also see: https://borgbackup.readthedocs.org
+
+# Instruction for pip installing borgbackup
+
+# Fedora
+
+First install borgbackup dependencies: 
+
+sudo dnf install openssl openssl-devel libacl libacl-devel lz4 lz4-devel python3-llfuse gcc redhat-rpm-config
+sudo dnf install python3 python3-pip python3-devel python3-gobject
+
+You should manually install msgpack first to ensure you get the native package:
+
+sudo dnf install gcc-c++
+sudo pip3 install Cython
+git clone git@github.com:msgpack/msgpack-python.git
+cd msgpack-python
+python3 setup.py install
+
+Install borgbackup:
+
+sudo pip3 install borgbackup
+
+
+# OS X:
+
+Install XCode, start XCode once and accept license
+Download and install MacPorts
+
+Open a terminal and run the following commands:
+
+sudo /opt/local/bin/port install python34
+sudo /opt/local/bin/port install py34-pip
+sudo /opt/local/bin/port install py34-pyobjc
+
+# TODO: Native msgpack!
+
+sudo pip-3.4 install borgbackup

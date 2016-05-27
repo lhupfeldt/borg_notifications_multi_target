@@ -1,0 +1,50 @@
+--- Client installation ---
+
+First follow the client/server common instructions for installing borgbackup in ../INSTALL.txt
+
+# Linux (Fedora 23):
+sudo pip3 install "psutil>=4.0.0" "multiconf>=4.0.0"
+
+# OS X:
+sudo pip-3.4 install "psutil>=4.0.0" "multiconf>=4.0.0"
+
+-- Configuration --
+
+ssh-keygen (no password)  # If you want to make a new ssh key or don't have any
+# The ssh key must be added to the server accounts 'authorized_keys'
+
+Copy 'client' dir to '~/bin/backup/client'
+Copy config.py.template to config.py
+Edit config.py with key and server information
+
+# Initialize a new repository
+borg init ...
+
+run ./bin/backup/client/backup.py to test
+
+# MAKE SURE to backup keys and passwords to offline media or your backup is useless!
+rsync -av --exclude __pycache__ --exclude '*~' --relative ~/./.gnupg ~/./.ssh ~/./bin/backup/client/{config.py,*.conf} <cd, dvd, usb multiple!>
+
+
+--- Put the following in your personal crontab ---
+Use the command 'crontab -e' to edit crontab
+This will run backup between 00:00 and 03:00 and after a reboot, change to your liking
+
+# Linux:
+@reboot sleep 180 && bin/backup/client/backup.py
+@daily sleep $(( $RANDOM \% 60 * 180 )) && bin/backup/client/backup.py
+
+# Mac:
+@reboot sleep 180 /opt/local/bin/python3.3 bin/backup/client/backup.py
+@daily sleep $(( $RANDOM \% 60 * 180 )) && /opt/local/bin/python3.3 bin/backup/client/backup.py
+
+--- Setting up email ---
+
+# Linux:
+1) Add MAILTO=<an email account that you read> to the top of crontab (crontab -e)
+2) Configure postfix (or another mail transfer agent) -
+   sudo dnf install postfix
+   Follow instructions like these for gmail: http://freelinuxtutorials.com/quick-tips-and-tricks/configure-postfix-to-use-gmail-in-rhelcentos/
+
+# Mac:
+TODO

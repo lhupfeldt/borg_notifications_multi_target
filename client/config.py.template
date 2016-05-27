@@ -1,0 +1,11 @@
+import os
+
+from config_objects import BackupConf, BackupRule
+
+
+with BackupConf(ssh_key=!ssh_key!, passphrase=!passphrase!, exclude_from_files=['user_file_selection.conf']):
+    # You can have any number of BackupRule definitions
+    BackupRule(!from_dir!, !target-user!, !target-host-1!, keep_within='2d', keep_hourly=48, keep_daily=30, keep_weekly=26, keep_monthly=24, keep_yearly=10)
+    # keep_... options have defaults
+    BackupRule(!from_dir!, !target-user!, !target-host-2!)
+    BackupRule(!from_dir-2!, !target-user!, !target-host-2!)

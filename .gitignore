@@ -1,0 +1,10 @@
+*~
+*.pyc
+.cache
+.coverage
+*.egg
+*.egg-info
+TAGS
+*.class
+.eggs
+dist
