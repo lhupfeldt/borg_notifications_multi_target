@@ -28,6 +28,7 @@ sudo pip3 install borgbackup
 # OS X:
 
 Install XCode, start XCode once and accept license
+Run in terminal: xcode-select --install
 Download and install MacPorts
 
 Open a terminal and run the following commands:
@@ -38,4 +39,4 @@ sudo /opt/local/bin/port install py34-pyobjc
 
 # TODO: Native msgpack!
 
-sudo pip-3.4 install borgbackup
+sudo -H /opt/local/bin/pip-3.4 install borgbackup

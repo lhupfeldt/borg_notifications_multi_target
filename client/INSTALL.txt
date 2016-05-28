@@ -6,7 +6,7 @@ First follow the client/server common instructions for installing borgbackup in 
 sudo pip3 install "psutil>=4.0.0" "multiconf>=4.0.0"
 
 # OS X:
-sudo pip-3.4 install "psutil>=4.0.0" "multiconf>=4.0.0"
+sudo -H /opt/local/bin/pip-3.4 install "psutil>=4.0.0" "multiconf>=4.0.0"
 
 -- Configuration --
 
@@ -18,7 +18,9 @@ Copy config.py.template to config.py
 Edit config.py with key and server information
 
 # Initialize a new repository
-borg init ...
+export BORG_RSH="ssh -i ~/.ssh/<private-key>"  # If you are not using standard id_rsa key file name
+borg init --encryption=keyfile backup@<your-backup-host>:backup
+
 
 run ./bin/backup/client/backup.py to test
 
@@ -35,8 +37,8 @@ This will run backup between 00:00 and 03:00 and after a reboot, change to your 
 @daily sleep $(( $RANDOM \% 60 * 180 )) && bin/backup/client/backup.py
 
 # Mac:
-@reboot sleep 180 /opt/local/bin/python3.3 bin/backup/client/backup.py
-@daily sleep $(( $RANDOM \% 60 * 180 )) && /opt/local/bin/python3.3 bin/backup/client/backup.py
+@reboot sleep 180 /opt/local/bin/python3.4 bin/backup/client/backup.py
+@daily sleep $(( $RANDOM \% 60 * 180 )) && /opt/local/bin/python3.4 bin/backup/client/backup.py
 
 --- Setting up email ---
 

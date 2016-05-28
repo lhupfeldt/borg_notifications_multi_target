@@ -41,7 +41,7 @@ _notification_center = None
 _NSUserNotification = None
 
 
-def init(app_name):  # pylint: disable=W0613
+def init(app_name, ignore_errors=False):  # pylint: disable=W0613
     global _NSUserNotification, _notification_center  # pylint: disable=W0603
 
     global objc
