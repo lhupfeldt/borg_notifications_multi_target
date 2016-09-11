@@ -27,8 +27,8 @@ sudo pip3 install borgbackup
 
 # OS X:
 
-Install XCode, start XCode once and accept license
-Run in terminal: xcode-select --install
+Install XCode from App Store, start XCode once and accept license
+Open a terminal and run: xcode-select --install
 Download and install MacPorts
 
 Open a terminal and run the following commands:

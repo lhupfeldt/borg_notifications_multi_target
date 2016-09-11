@@ -51,7 +51,7 @@ def borg(args):
 
     if not sys.stdout.isatty():
         with config.log_file.open('a+') as log_file:
-            subprocess.check_call(cmd, stdout=log_file)
+            subprocess.check_call(cmd, stdout=log_file, stderr=log_file)
     else:
         subprocess.check_call(cmd)
 

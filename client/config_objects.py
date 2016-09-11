@@ -19,6 +19,7 @@ class BackupConf(multiconf.ConfigRoot):
         self.passphrase = passphrase
         self.exclude_from_files = exclude_from_files
         self.borg = borg
+        self.prefix = getpass.getuser()
 
     def mc_init(self):
         _home_dir = os.path.expanduser('~')  # Path.home() requires 3.5
@@ -26,7 +27,6 @@ class BackupConf(multiconf.ConfigRoot):
         if self.ssh_key:
             assert self.ssh_key.exists()
         self.log_file = Path(_home_dir, '.log/backup/backup.log')
-        self.prefix = getpass.getuser()
 
 
 @named_as('backup_rules')
