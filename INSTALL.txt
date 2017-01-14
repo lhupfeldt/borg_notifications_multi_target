@@ -14,11 +14,11 @@ sudo dnf install python3 python3-pip python3-devel python3-gobject
 
 You should manually install msgpack first to ensure you get the native package:
 
-sudo dnf install gcc-c++
+sudo dnf install gcc-c++ python3-devel
 sudo pip3 install Cython
-git clone git@github.com:msgpack/msgpack-python.git
+git clone https://github.com/msgpack/msgpack-python.git
 cd msgpack-python
-python3 setup.py install
+sudo python3 setup.py install
 
 Install borgbackup:
 
