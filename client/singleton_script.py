@@ -3,12 +3,20 @@
 # Copyright (c) 2012 Lars Hupfeldt Nielsen, Hupfeldt IT
 # All rights reserved. This work is under a BSD license, see LICENSE.TXT.
 
-import sys, os
-import psutil
+import sys, os, platform
+system = platform.system()
+has_psutil = system != 'Windows' and not system.startswith('CYGWIN')
+if has_psutil:
+    import psutil
+
 
 def singleton_script():
     proc_name = os.path.basename(__file__)
     my_proc = None
+
+    if not has_psutil:
+        print("Warning single instance invocation not checked on Windows, make sure you only run one backup at any time")
+        return
 
     for proc in psutil.process_iter():
         try:

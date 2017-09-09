@@ -2,9 +2,12 @@ import os
 import getpass
 from pathlib import Path
 
+from appdirs import AppDirs
 import multiconf
 from multiconf.decorators import named_as, nested_repeatables
 
+
+app_dirs = AppDirs("bbmt", "Hupfeldt_IT")
 
 ef = multiconf.envs.EnvFactory()
 my_env = ef.Env('my_env')
@@ -20,13 +23,14 @@ class BackupConf(multiconf.ConfigRoot):
         self.exclude_from_files = exclude_from_files
         self.borg = borg
         self.prefix = getpass.getuser()
+        self.log_file = None
 
     def mc_init(self):
         _home_dir = os.path.expanduser('~')  # Path.home() requires 3.5
         self.ssh_key = Path(_home_dir, '.ssh', self.ssh_key) if self.ssh_key else None
         if self.ssh_key:
             assert self.ssh_key.exists()
-        self.log_file = Path(_home_dir, '.log/backup/backup.log')
+        self.log_file = Path(app_dirs.user_log_dir, '.backup.log')
 
 
 @named_as('backup_rules')

@@ -3,19 +3,17 @@
 First follow the client/server common instructions for installing borgbackup in ../INSTALL.txt
 
 # Linux (Fedora 23):
-sudo pip3 install "psutil>=4.0.0" "multiconf>=4.0.0"
+sudo python3 setup.py install
 
 # OS X:
-sudo -H /opt/local/bin/pip-3.4 install "psutil>=4.0.0" "multiconf>=4.0.0"
+sudo -H /opt/local/bin/python3 setup.py install
 
 -- Configuration --
 
 ssh-keygen (no password)  # If you want to make a new ssh key or don't have any
 # The ssh key must be added to the server accounts 'authorized_keys'
 
-Copy 'client' dir to '~/bin/backup/client'
-Copy config.py.template to config.py
-Edit config.py with key and server information
+Edit bbmt_config.py with key and server information
 
 # Initialize a new repository
 export BORG_RSH="ssh -i ~/.ssh/<private-key>"  # If you are not using standard id_rsa key file name

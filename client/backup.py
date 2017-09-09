@@ -5,17 +5,61 @@
 # All rights reserved. This work is under a BSD license, see LICENSE.TXT.
 
 
-import sys, os
+import sys, os, shutil
 from os.path import join as jp
 import subprocess, time, resource
 
-import notifications
-from singleton_script import singleton_script
-from rotate_logs import rotate_logs
+from . import notifications
+from .singleton_script import singleton_script
+from .rotate_logs import rotate_logs
+from .config_objects import app_dirs
 
-from config import config  # pylint: disable=wrong-import-order,no-name-in-module
 
-_here = os.path.dirname(__file__)
+sys.path.insert(0, os.path.dirname(__file__))
+sys.path.insert(0, app_dirs.user_config_dir)
+
+
+def _check_cfg_file(cfg_file_name, cfg_file_example_name, msg=''):
+    cfg_file = jp(app_dirs.user_config_dir, cfg_file_name)
+    if not os.path.exists(cfg_file):
+        print("*** Error: Configuration file '{cf}' not found".format(cf=cfg_file), file=sys.stderr)
+        here = os.path.dirname(__file__)
+        cfg_template_src = jp(here, 'config', cfg_file_example_name)
+        cfg_template_tgt = jp(app_dirs.user_config_dir, cfg_file_example_name)
+        try:
+            os.mkdir(app_dirs.user_config_dir)
+        except FileExistsError:
+            pass
+        shutil.copy(cfg_template_src, app_dirs.user_config_dir)
+        print("  You can rename '{tmplt}' to '{cf}' and edit it.".format(cf=cfg_file, tmplt=cfg_template_tgt), file=sys.stderr)
+        print("  " + msg + '\n', file=sys.stderr)
+        return 0
+
+    return 1
+
+
+cfg_found = 0
+
+try:
+    from bbmt_config import config  # pylint: disable=wrong-import-order,no-name-in-module
+    cfg_found += 1
+except ImportError as ex:
+    cfg_file_name = 'bbmt_config.py'
+    cfg_template_file_name = cfg_file_name + '.template'
+    cfg_found += _check_cfg_file(cfg_file_name, cfg_template_file_name)
+    if cfg_found == 1:
+        raise
+
+
+exclude_from_file_name = 'user_file_selection.conf'
+exclude_from_file_example = exclude_from_file_name + '.example'
+cfg_found += _check_cfg_file(
+    exclude_from_file_name, exclude_from_file_example, "Make sure to review it closely, so that you don not exclude anything you want to backup.")
+
+if cfg_found < 2:
+    sys.exit(1)
+
+exclude_from_file = jp(app_dirs.user_config_dir, exclude_from_file_name)
 
 program_name = 'Backup'
 
@@ -70,7 +114,6 @@ def backup(from_dir, remote_url, prefix):
         excl.extend([fdrel('Downloads')])
 
     excl = ["--exclude=sh:" + fdrel(dd) for dd in excl]
-    exclude_from_file = jp(_here, 'user_file_selection.conf')
 
     # Start backup
     borg(['create', '--stats', '--lock-wait', '300', '--show-rc', '--progress', '--compression', 'lz4',

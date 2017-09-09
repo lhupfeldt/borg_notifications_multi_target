@@ -53,6 +53,8 @@ sh:**/Crash Reports
 
 sh:**/__pycache__
 sh:**/*.pyc
+sh:**/.tox
+sh:**/.eggs
 sh:**/*.class
 sh:**/*.a
 sh:**/*.so

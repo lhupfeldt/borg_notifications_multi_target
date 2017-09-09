@@ -1,0 +1,3 @@
+include *.md *.txt
+recursive-include client/config *.template *.example
+recursive-include client *.txt *.py
