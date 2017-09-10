@@ -1,18 +1,18 @@
 # This file is an example!
 # Make sure it doesn't exclude enything you want to backup!
 
-sh:extsrc
-sh:.java
-sh:.adobe
-sh:.macromedia
-sh:.wine
-sh:winetricks
-sh:.Xauthority
-sh:fontconfig
-sh:.gnupg/random_seed
-sh:.dbus
-sh:.python-eggs
-sh:Hentninger
+/home/*/extsrc
+/home/*/.java
+/home/*/.adobe
+/home/*/.macromedia
+/home/*/.wine
+/home/*/winetricks
+/home/*/.Xauthority
+/home/*/fontconfig
+/home/*/.gnupg/random_seed
+/home/*/.dbus
+/home/*/.python-eggs
+/home/*/Hentninger
 
 sh:**/duplicity/backup_user.conf
 sh:**/backup
