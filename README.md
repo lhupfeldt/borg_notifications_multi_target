@@ -1,5 +1,5 @@
-borgbackup_multi_target
-=======================
+borgbackup_notifications_multi_target
+=====================================
 
 Wrapper around borgbackup: https://borgbackup.readthedocs.org
 

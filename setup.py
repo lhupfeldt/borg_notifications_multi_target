@@ -8,7 +8,7 @@ PROJECT_NAME = 'borgbackup_multi_target'
 COPYRIGHT = u"Copyright (c) 2016 - 2017 Lars Hupfeldt Nielsen, Hupfeldt IT"
 PROJECT_AUTHORS = u"Lars Hupfeldt Nielsen"
 PROJECT_EMAILS = 'lhn@hupfeldtit.dk'
-PROJECT_URL = "https://github.com/lhupfeldt/borgbackup_multi_target"
+PROJECT_URL = "https://github.com/lhupfeldt/borgbackup_notifications_multi_target"
 SHORT_DESCRIPTION = 'Wrapper around borgbackup to provide easy configuration of multiple target and desktop notifications.'
 LONG_DESCRIPTION = open(os.path.join(PROJECT_ROOT, "README.md")).read()
 
