@@ -3,8 +3,8 @@
 
 
 import os
-import psutil
 import getpass
+import psutil
 
 
 class NoSessionError(Exception):

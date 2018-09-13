@@ -2,18 +2,22 @@
 
 First follow the client/server common instructions for installing borgbackup in ../INSTALL.txt
 
+Then install the 'bbmt' command:
+
 # Linux (Fedora 23):
-sudo python3 setup.py install
+sudo python3 setup.py install --user
 
 # OS X:
-sudo -H /opt/local/bin/python3 setup.py install
+sudo -H /opt/local/bin/python3 setup.py install --user
 
 -- Configuration --
 
 ssh-keygen (no password)  # If you want to make a new ssh key or don't have any
 # The ssh key must be added to the server accounts 'authorized_keys'
 
-Edit bbmt_config.py with key and server information
+Run 'bbmt' to generated a config template in the correct location
+Edit the template as mentioned in the bbmt command output to set the key and server information
+
 
 # Initialize a new repository
 export BORG_RSH="ssh -i ~/.ssh/<private-key>"  # If you are not using standard id_rsa key file name
@@ -26,13 +30,13 @@ run ./bin/backup/client/backup.py to test
 rsync -av --exclude __pycache__ --exclude '*~' --relative ~/./.gnupg ~/./.ssh ~/./bin/backup/client/{config.py,*.conf} <cd, dvd, usb multiple!>
 
 
---- Put the following in your personal crontab ---
+--- Update your personal crontab ---
 Use the command 'crontab -e' to edit crontab
 This will run backup between 00:00 and 03:00 and after a reboot, change to your liking
 
 # Linux:
-@reboot sleep 180 && bin/backup/client/backup.py
-@daily sleep $(( $RANDOM \% 60 * 180 )) && bin/backup/client/backup.py
+@reboot sleep 180 && bbmt
+@daily sleep $(( $RANDOM \% 60 * 180 )) && bbmt
 
 # Mac:
 @reboot sleep 180 /opt/local/bin/python3.4 bin/backup/client/backup.py

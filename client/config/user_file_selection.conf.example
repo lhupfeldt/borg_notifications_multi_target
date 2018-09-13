@@ -1,5 +1,6 @@
 # This file is an example!
 # Make sure it doesn't exclude enything you want to backup!
+# Note that the script itself attempts to exclude the 'Downloads' directory in any language.
 
 /home/*/extsrc
 /home/*/.java

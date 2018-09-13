@@ -3,38 +3,46 @@ import getpass
 from pathlib import Path
 
 from appdirs import AppDirs
-import multiconf
+from multiconf import McConfigRoot, RepeatableConfigItem, MC_REQUIRED
 from multiconf.decorators import named_as, nested_repeatables
 
 
 app_dirs = AppDirs("bbmt", "Hupfeldt_IT")
-
-ef = multiconf.envs.EnvFactory()
-my_env = ef.Env('my_env')
+config_dir = app_dirs.user_config_dir
 
 
 @nested_repeatables('backup_rules')
-class BackupConf(multiconf.ConfigRoot):
-    """By default we don't use the env feature of multiconf, so just provide dummy values"""
-    def __init__(self, ssh_key, passphrase, exclude_from_files, borg='borg', selected_env=my_env, env_factory=ef):
-        super(BackupConf, self).__init__(selected_env=selected_env, env_factory=env_factory)
-        self.ssh_key = Path(ssh_key) if ssh_key else None
+class BackupConf(McConfigRoot):
+    """Top level object for configuration.
+
+    Args:
+        ssh_key_file_name (str): Filename or path to ssh key file. It will be interpreted as relative to HOME/.ssh if not absolute.
+        passphrase (str): Passphrase for ssh_key.
+        exclude_from_files (list[str]): A list of file names with exclude patterns. Will be interpreted relative to 'config_dir'.
+        borg (str): borg command, default is 'borg'. Specify path if 'borg' is not in the PATH.
+    """
+
+    def __init__(self, ssh_key_file_name, passphrase, exclude_from_file_names, borg='borg'):
+        super(BackupConf, self).__init__()
+        self.ssh_key_file_name = ssh_key_file_name
         self.passphrase = passphrase
-        self.exclude_from_files = exclude_from_files
+        self.exclude_from_file_names = exclude_from_file_names
         self.borg = borg
         self.prefix = getpass.getuser()
-        self.log_file = None
+
+        self.ssh_key = MC_REQUIRED
+        self.log_file = MC_REQUIRED
+        self.exclude_from_files = MC_REQUIRED
 
     def mc_init(self):
-        _home_dir = os.path.expanduser('~')  # Path.home() requires 3.5
-        self.ssh_key = Path(_home_dir, '.ssh', self.ssh_key) if self.ssh_key else None
-        if self.ssh_key:
-            assert self.ssh_key.exists()
+        # Path.home() requires 3.5, so use expanduser('~') instead
+        self.ssh_key = Path(os.path.expanduser('~'), '.ssh', self.ssh_key_file_name) if self.ssh_key_file_name else None
         self.log_file = Path(app_dirs.user_log_dir, '.backup.log')
+        self.exclude_from_files = [Path(config_dir, fn) for fn in self.exclude_from_file_names]
 
 
 @named_as('backup_rules')
-class BackupRule(multiconf.RepeatableConfigItem):
+class BackupRule(RepeatableConfigItem):
     def __init__(self, from_dir, target_user, target_host,
                  keep_within='2d',
                  keep_hourly=48, keep_daily=30, keep_weekly=26, keep_monthly=24, keep_yearly=10):

@@ -4,11 +4,11 @@ from setuptools import setup
 
 
 PROJECT_ROOT, _ = os.path.split(__file__)
-PROJECT_NAME = 'borgbackup_multi_target'
+PROJECT_NAME = 'borgbackup_notifications_multi_target'
 COPYRIGHT = u"Copyright (c) 2016 - 2017 Lars Hupfeldt Nielsen, Hupfeldt IT"
 PROJECT_AUTHORS = u"Lars Hupfeldt Nielsen"
 PROJECT_EMAILS = 'lhn@hupfeldtit.dk'
-PROJECT_URL = "https://github.com/lhupfeldt/borgbackup_notifications_multi_target"
+PROJECT_URL = "https://github.com/lhupfeldt/" + PROJECT_NAME
 SHORT_DESCRIPTION = 'Wrapper around borgbackup to provide easy configuration of multiple target and desktop notifications.'
 LONG_DESCRIPTION = open(os.path.join(PROJECT_ROOT, "README.md")).read()
 
@@ -19,15 +19,15 @@ if __name__ == "__main__":
         # version_command=('git describe', 'pep440-git'),
         author=PROJECT_AUTHORS,
         author_email=PROJECT_EMAILS,
-        packages=['borgbackup_multi_target', 'borgbackup_multi_target.client', 'borgbackup_multi_target.client.notifications'],
+        packages=[PROJECT_NAME, PROJECT_NAME + '.client', PROJECT_NAME + '.client.notifications'],
         package_dir={
-            'borgbackup_multi_target': '.',
-            'borgbackup_multi_target.client': 'client',
-            'borgbackup_multi_target.client.notifications': 'client/notifications',
+            PROJECT_NAME: '.',
+            PROJECT_NAME + '.client': 'client',
+            PROJECT_NAME + '.client.notifications': 'client/notifications',
         },
         zip_safe=False,
         include_package_data=True,
-        install_requires=['borgbackup', 'psutil>=4.0.0', 'multiconf~=5.0', 'appdirs>=1.4'],
+        install_requires=['psutil>=4.0.0', 'multiconf>=8.1', 'appdirs>=1.4'],
         # setup_requires='setuptools-version-command~=2.2',
         test_suite='test',
         tests_require=['pytest>=3.0.5'],
@@ -53,6 +53,6 @@ if __name__ == "__main__":
         ],
         entry_points='''
             [console_scripts]
-            bbmt=borgbackup_multi_target.client.backup:main
-        ''',
+            bbmt={}.client.backup:main
+        '''.format(PROJECT_NAME),
     )
